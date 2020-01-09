@@ -1,0 +1,9 @@
+version: 3.7
+services:
+  wfe-uaa:
+    build: Dockerfile
+    container_name: wfe-uaa
+#    volumes:
+#      - /opt/wfe/uaa-0.0.1.jar:/wfe/wfe-uaa.jar
+    ports:
+      - "8080:8080"

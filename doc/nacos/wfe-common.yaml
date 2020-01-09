@@ -1,0 +1,28 @@
+feign:
+  hystrix:
+  # false: feign异常处理后返回的状态为200，导致seata不能正常处理事务
+    enabled: false
+  okhttp:
+    enabled: true
+  httpclient:
+    enabled: false
+
+ribbon:
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          # 配置这个，feign拦截器才可以获取request
+          strategy: SEMAPHORE
+
+wfe:
+  security:
+    ignore-uri:
+#      wfe-gateway:
+      wfe-uaa: /oauth/**
+      wfe-user-service: /**
+      wfe-system-service: /**

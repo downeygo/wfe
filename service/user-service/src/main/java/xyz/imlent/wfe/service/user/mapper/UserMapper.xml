@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.imlent.wfe.service.user.mapper.UserMapper">
+    <select id="getUser" resultType="xyz.imlent.wfe.api.user.entity.User">
+        select id, username, password, account_locked, account_expired
+        from oauth_user_details
+        where username = #{username}
+    </select>
+</mapper>

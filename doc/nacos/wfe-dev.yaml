@@ -1,0 +1,20 @@
+wfe:
+  gateway:
+    dynamic: true
+  datasource:
+    url: jdbc:mysql://imlent.xyz:3306/oauth2?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
+    username: root
+    password: ZTWFEE
+  services:
+    wfe-gateway:
+      port: 80
+      context-path:
+    wfe-uaa:
+      port: 8080
+      context-path: /uaa
+    wfe-user-service:
+      port: 8081
+      context-path: /user
+    wfe-system-service:
+      port: 8070
+      context-path: /sys

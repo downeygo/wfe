@@ -1,0 +1,55 @@
+[
+  {
+    "id": "wfe-uaa",
+    "uri": "lb://wfe-uaa",
+    "order": 0,
+    "predicates": {
+      "name": "Path",
+      "args": {
+        "_genkey_0": "/uaa/**"
+      }
+    },
+    "filters": {
+      "name": "StripPrefix",
+      "args": {
+        "_genkey_0": 0
+      }
+    }
+  },
+  {
+    "id": "wfe-user-service",
+    "uri": "lb://wfe-user-service",
+    "order": 0,
+    "predicates": {
+      "name": "Path",
+      "args": {
+        "_genkey_0": "/user/**"
+      },
+      "stripPrefix": 0
+    },
+    "filters": {
+      "name": "StripPrefix",
+      "args": {
+        "_genkey_0": 0
+      }
+    }
+  },
+  {
+    "id": "wfe-system-service",
+    "uri": "lb://wfe-system-service",
+    "order": 0,
+    "predicates": {
+      "name": "Path",
+      "args": {
+        "_genkey_0": "/sys/**"
+      },
+      "stripPrefix": 0
+    },
+    "filters": {
+      "name": "StripPrefix",
+      "args": {
+        "_genkey_0": 0
+      }
+    }
+  }
+]
