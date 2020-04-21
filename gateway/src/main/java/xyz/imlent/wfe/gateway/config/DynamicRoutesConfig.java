@@ -16,7 +16,7 @@ import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
-import xyz.imlent.wfe.core.config.NacosConfig;
+import xyz.imlent.wfe.core.customer.NacosConfig;
 
 import java.util.List;
 import java.util.concurrent.Executor;

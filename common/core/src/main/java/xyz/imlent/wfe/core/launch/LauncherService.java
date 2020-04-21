@@ -8,6 +8,7 @@ import org.springframework.core.Ordered;
  *
  * @author wfee
  */
+@Deprecated
 public interface LauncherService extends Ordered, Comparable<LauncherService> {
 
     /**

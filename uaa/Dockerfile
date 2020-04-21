@@ -13,4 +13,4 @@ ADD ./target/uaa-0.0.1.jar ./wfe-uaa.jar
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "wfe-uaa.jar"]
 
-CMD ["--spring.profiles.active=dev"]
+CMD ["--spring.profiles.active=test"]

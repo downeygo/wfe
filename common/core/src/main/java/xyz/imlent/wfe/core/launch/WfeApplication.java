@@ -6,18 +6,20 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.*;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import xyz.imlent.wfe.core.config.NacosConfig;
 import xyz.imlent.wfe.core.constant.BaseConstant;
+import xyz.imlent.wfe.core.customer.NacosConfig;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 项目启动器，搞定环境变量问题
+ * 项目启动器，搞定环境变量问题。
+ * 已被xyz.imlent.wfe.core.config.EnvProcessor取代
  *
  * @author wfee
  */
 @Slf4j
+@Deprecated
 public class WfeApplication {
 
     public static ConfigurableApplicationContext run(String appName, Class source, String... args) {
@@ -58,6 +60,7 @@ public class WfeApplication {
         props.setProperty("spring.application.name", appName);
         props.setProperty("spring.profiles.active", activeProfile);
         props.setProperty("spring.main.allow-bean-definition-overriding", "true");
+        // nacos注册中心配置
         props.setProperty("spring.cloud.nacos.config.prefix", NacosConfig.NACOS_CONFIG_COMMON_PREFIX);
         props.setProperty("spring.cloud.nacos.config.file-extension", NacosConfig.NACOS_CONFIG_FILE_EXTENSION);
         props.setProperty("spring.cloud.nacos.config.shared-dataids", NacosConfig.getConfig(activeProfile));
@@ -67,7 +70,7 @@ public class WfeApplication {
         props.setProperty("spring.cloud.alibaba.seata.tx-service-group", appName);
         SpringApplicationBuilder builder = new SpringApplicationBuilder(source);
         builder.profiles(activeProfile);
-        // 加载自定义组件
+        // SPI加载自定义组件
         List<LauncherService> launcherList = new ArrayList<>();
         ServiceLoader.load(LauncherService.class).forEach(launcherList::add);
         launcherList.stream()

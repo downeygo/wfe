@@ -12,12 +12,13 @@ public interface AppConstant {
     /**
      * 认证模块服务名称
      */
-    String APP_GATEWAT_NAME = "wfe-gateway";
+    String APP_GATEWAY_NAME = "wfe-gateway";
 
     /**
      * 系统模块服务名称
      */
     String APP_SYSTEM_SERVICE_NAME = "wfe-system-service";
+
     /**
      * 用户模块服务名称
      */

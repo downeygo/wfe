@@ -13,6 +13,6 @@ import xyz.imlent.wfe.core.launch.WfeApplication;
 @ComponentScan(BaseConstant.BASE_PACKAGE)
 public class GatewayApplication {
     public static void main(String[] args) {
-        WfeApplication.run(AppConstant.APP_GATEWAT_NAME, GatewayApplication.class, args);
+        WfeApplication.run(AppConstant.APP_GATEWAY_NAME, GatewayApplication.class, args);
     }
 }

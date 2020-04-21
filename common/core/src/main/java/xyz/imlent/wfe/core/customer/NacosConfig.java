@@ -1,4 +1,4 @@
-package xyz.imlent.wfe.core.config;
+package xyz.imlent.wfe.core.customer;
 
 import xyz.imlent.wfe.core.constant.BaseConstant;
 
@@ -37,13 +37,13 @@ public class NacosConfig {
     /**
      * 开发环境配置文件
      */
-
     public static final String NACOS_CONFIG_DEV_NAME = NACOS_CONFIG_PREFIX + BaseConstant.ENV_DEV + NACOS_CONFIG_FILE_END;
+
     /**
      * 测试环境配置文件
      */
-
     public static final String NACOS_CONFIG_TEST_NAME = NACOS_CONFIG_PREFIX + BaseConstant.ENV_TEST + NACOS_CONFIG_FILE_END;
+
     /**
      * 生产环境配置文件
      */
@@ -62,8 +62,8 @@ public class NacosConfig {
     /**
      * 根据环境获取配置文件
      *
-     * @param env
-     * @return
+     * @param env 环境
+     * @return 配置文件名称
      */
     public static String getConfig(String env) {
         if (env.equals(BaseConstant.ENV_TEST)) {

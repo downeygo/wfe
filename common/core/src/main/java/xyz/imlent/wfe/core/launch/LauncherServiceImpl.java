@@ -1,14 +1,14 @@
 package xyz.imlent.wfe.core.launch;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import xyz.imlent.wfe.core.config.NacosConfig;
-import xyz.imlent.wfe.core.constant.AppConstant;
+import xyz.imlent.wfe.core.customer.NacosConfig;
 
 import java.util.Properties;
 
 /**
  * @author wfee
  */
+@Deprecated
 public class LauncherServiceImpl implements LauncherService {
 
     @Override
@@ -20,5 +20,4 @@ public class LauncherServiceImpl implements LauncherService {
         // seata分布式事务配置
         props.setProperty("spring.cloud.alibaba.seata.tx-service-group", appName);
     }
-
 }
