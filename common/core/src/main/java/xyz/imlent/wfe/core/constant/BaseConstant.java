@@ -15,6 +15,5 @@ public interface BaseConstant {
     String ENV_TEST = AppEnv.TEST.name().toLowerCase();
     String ENV_PROD = AppEnv.PROD.name().toLowerCase();
 
-    @Deprecated
     String[] ENVS = new String[]{ENV_DEV, ENV_TEST, ENV_PROD};
 }

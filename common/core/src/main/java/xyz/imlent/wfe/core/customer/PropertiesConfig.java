@@ -12,7 +12,7 @@ public class PropertiesConfig {
     /**
      * 环境
      */
-    private static String ACTIVE_ENV = BaseConstant.ENV_DEV;
+    public static String ACTIVE_ENV = BaseConstant.ENV_DEV;
 
     /**
      * 加载配置文件
@@ -21,10 +21,10 @@ public class PropertiesConfig {
      * @return
      */
     @SuppressWarnings("ALL")
-    public static Map<String, Object> initAppConfig(String name) {
+    public static Map<String, Object> initAppConfig(String env, String name) {
         Map<String, Object> configMap = new ConcurrentHashMap<>(16);
         configMap.put("spring.application.name", name);
-        configMap.put("spring.profiles.active", ACTIVE_ENV);
+        configMap.put("spring.profiles.active", env);
         configMap.put("spring.main.allow-bean-definition-overriding", "true");
         // nacos注册中心配置
         configMap.put("spring.cloud.nacos.config.prefix", NacosConfig.NACOS_CONFIG_COMMON_PREFIX);
