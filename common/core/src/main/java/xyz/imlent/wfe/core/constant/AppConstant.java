@@ -4,6 +4,7 @@ package xyz.imlent.wfe.core.constant;
  * @author wfee
  */
 public interface AppConstant {
+
     /**
      * 认证模块服务名称
      */

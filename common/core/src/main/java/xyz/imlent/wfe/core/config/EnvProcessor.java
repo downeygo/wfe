@@ -1,5 +1,6 @@
 package xyz.imlent.wfe.core.config;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -11,10 +12,11 @@ import xyz.imlent.wfe.core.constant.BaseConstant;
 import xyz.imlent.wfe.core.customer.PropertiesConfig;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
+ * 项目启动加载环境
+ * 已取代 {@link xyz.imlent.wfe.core.launch.WfeApplication}
+ *
  * @author wfee
  */
 public class EnvProcessor implements EnvironmentPostProcessor {
@@ -53,13 +55,12 @@ public class EnvProcessor implements EnvironmentPostProcessor {
     private String getEnv(ConfigurableEnvironment environment) {
         String[] profiles = environment.getActiveProfiles();
         // 获取可使用的环境变量
-        List<String> defaultEnvs = Arrays.stream(BaseConstant.ENVS).collect(Collectors.toList());
         int length = profiles.length;
         if (length == 0) {
             return PropertiesConfig.ACTIVE_ENV;
         }
-        if (length > 1 || (!defaultEnvs.contains(profiles[0]))) {
-            throw new RuntimeException(String.format("请在%s环境中选择一个使用，当前环境%s", defaultEnvs.toString(), Arrays.toString(profiles)));
+        if (length > 1 || !ArrayUtils.contains(BaseConstant.ENVS, profiles[0])) {
+            throw new RuntimeException(String.format("请在%s环境中选择一个使用，当前环境%s", Arrays.toString(BaseConstant.ENVS), Arrays.toString(profiles)));
         }
         return profiles[0];
     }

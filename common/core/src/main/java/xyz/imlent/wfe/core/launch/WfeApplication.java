@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  * 项目启动器，搞定环境变量问题。
- * 已被xyz.imlent.wfe.core.config.EnvProcessor取代
+ * 已被 {@link xyz.imlent.wfe.core.config.EnvProcessor} 取代
  *
  * @author wfee
  */

@@ -17,6 +17,6 @@ public class FeignInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         Map<String, String> headers = WebUtil.getHeaders();
-        headers.forEach((k, v) -> requestTemplate.header(k, v));
+        headers.forEach(requestTemplate::header);
     }
 }

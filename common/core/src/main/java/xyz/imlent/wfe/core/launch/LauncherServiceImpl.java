@@ -6,6 +6,8 @@ import xyz.imlent.wfe.core.customer.NacosConfig;
 import java.util.Properties;
 
 /**
+ * 已被 {@link xyz.imlent.wfe.core.config.EnvProcessor} 取代
+ *
  * @author wfee
  */
 @Deprecated

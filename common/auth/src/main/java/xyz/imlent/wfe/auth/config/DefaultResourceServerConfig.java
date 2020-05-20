@@ -23,8 +23,7 @@ public class DefaultResourceServerConfig extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources
-                .resourceId(getResourceId())
+        resources.resourceId(getResourceId())
                 .tokenStore(tokenStorer)
                 .stateless(true);
     }

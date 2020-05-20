@@ -5,6 +5,7 @@ import org.springframework.core.Ordered;
 
 /**
  * launcher 扩展 用于一些组件发现
+ * 已被 {@link xyz.imlent.wfe.core.config.EnvProcessor} 取代
  *
  * @author wfee
  */
