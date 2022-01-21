@@ -1,13 +1,14 @@
 package xyz.imlent.wfe.gateway.config;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionWriter;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
 import xyz.imlent.wfe.core.customer.NacosConfig;
+import xyz.imlent.wfe.gateway.properties.DynamicRoutesProperties;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -27,29 +29,34 @@ import java.util.concurrent.Executor;
 @Slf4j
 @Configuration
 @AllArgsConstructor
-@ConditionalOnProperty(prefix = "wfe.gateway", name = "dynamic", havingValue = "true")
+@ConditionalOnBean(DynamicRoutesProperties.class)
 public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
-    private ApplicationEventPublisher applicationEventPublisher;
+    private ApplicationEventPublisher publisher;
 
     private RouteDefinitionWriter routeDefinitionWriter;
 
-    private List<String> cachedRouteId;
+    private DynamicRoutesProperties properties;
 
     @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        this.applicationEventPublisher = applicationEventPublisher;
+    public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
+        this.publisher = publisher;
     }
 
     @Bean
-    public void getGatewayConfig() {
+    public void refreshGatewayRoute() {
         try {
             ConfigService configService = NacosFactory.createConfigService(NacosConfig.NACOS_ADDR);
-            String config = configService.getConfig(NacosConfig.GATEWAY_ROUTE_DATAID, NacosConfig.GATEWAT_ROUTE_GROUP, 5000L);
-            // 启动初始化
-            parseConfig(config).forEach(r -> addRoute(r));
-            log.info("add gateway routes:{}",config);
+            String routeDataId = properties.getRouteDataId();
+            if (StringUtils.isBlank(routeDataId)) {
+                throw new RuntimeException("未匹配到动态路由ID{gateway.route-data-id}");
+            }
+            String config = configService.getConfig(routeDataId, NacosConfig.DEFAULT_GROUP, 5000L);
+            if (StringUtils.isBlank(config)) {
+                throw new RuntimeException("未获取到动态路由配置{" + routeDataId + "}");
+            }
+            log.info("add gateway dynamic routes:{}", config);
             // 添加监听
-            configService.addListener(NacosConfig.GATEWAY_ROUTE_DATAID, NacosConfig.GATEWAT_ROUTE_GROUP, new Listener() {
+            configService.addListener(routeDataId, NacosConfig.DEFAULT_GROUP, new Listener() {
                 @Override
                 public Executor getExecutor() {
                     return null;
@@ -57,14 +64,14 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
 
                 @Override
                 public void receiveConfigInfo(String config) {
-                    deleteCachedRoute();
-                    parseConfig(config).forEach(r -> addRoute(r));
-                    publish();
-                    log.info("update gateway routes:{}", config);
+                    List<RouteDefinition> routeDefinitionList = parseConfig(config);
+                    updateRoutes(routeDefinitionList);
+                    log.info("update gateway dynamic routes:{}", config);
                 }
             });
         } catch (NacosException e) {
             e.printStackTrace();
+            log.error(e.getErrMsg());
         }
     }
 
@@ -74,7 +81,7 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
      * @param config
      */
     private List<RouteDefinition> parseConfig(String config) {
-        return JSONObject.parseArray(config, RouteDefinition.class);
+        return JSON.parseArray(config, RouteDefinition.class);
     }
 
     /**
@@ -84,22 +91,39 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
      */
     private void addRoute(RouteDefinition routeDefinition) {
         routeDefinitionWriter.save(Mono.just(routeDefinition)).subscribe();
-        cachedRouteId.add(routeDefinition.getId());
     }
 
     /**
-     * 删除缓存路由
+     * 删除路由
+     *
+     * @param routeDefinition
      */
-    private void deleteCachedRoute() {
-        cachedRouteId.forEach(id -> routeDefinitionWriter.delete(Mono.just(id)).subscribe());
-        cachedRouteId.removeAll(cachedRouteId);
+    private void deleteRoute(RouteDefinition routeDefinition) {
+        this.routeDefinitionWriter.delete(Mono.just(routeDefinition.getId())).subscribe();
     }
 
+    /**
+     * 更新路由
+     *
+     * @param routeDefinitionList
+     */
+    private void updateRoutes(List<RouteDefinition> routeDefinitionList) {
+        try {
+            routeDefinitionList.forEach(rd -> {
+                this.deleteRoute(rd);
+                this.addRoute(rd);
+            });
+            this.publish();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
+        }
+    }
 
     /**
      * 发布路由
      */
     private void publish() {
-        this.applicationEventPublisher.publishEvent(new RefreshRoutesEvent(this.routeDefinitionWriter));
+        this.publisher.publishEvent(new RefreshRoutesEvent(this.routeDefinitionWriter));
     }
 }

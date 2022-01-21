@@ -25,14 +25,12 @@ public class DbMetaObjectHandler implements MetaObjectHandler {
         if (addTime == null) {
             setFieldValByName(ADD_TIME, LocalDateTime.now(), metaObject);
         }
-        addTime = getFieldValByName(ADD_TIME, metaObject);
         if (editTime == null) {
             setFieldValByName(EDIT_TIME, LocalDateTime.now(), metaObject);
         }
         if (addUser == null) {
             setFieldValByName(ADD_USER, getUsername(), metaObject);
         }
-        addUser = getFieldValByName(ADD_USER, metaObject);
         if (editUser == null) {
             setFieldValByName(EDIT_USER, getUsername(), metaObject);
         }

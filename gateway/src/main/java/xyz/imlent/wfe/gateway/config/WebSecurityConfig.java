@@ -16,11 +16,11 @@ import java.util.List;
  */
 @AllArgsConstructor
 @EnableWebFluxSecurity
-public class WebSecutityConfig {
+public class WebSecurityConfig {
     private ResourceSecurityProperties securityProperties;
 
     @Bean
-    public SecurityWebFilterChain webFluxSecurityFilterChain(ServerHttpSecurity http) throws Exception {
+    public SecurityWebFilterChain webFluxSecurityFilterChain(ServerHttpSecurity http) {
         return http.authorizeExchange()
                 .anyExchange().permitAll()
                 .and()
@@ -30,11 +30,9 @@ public class WebSecutityConfig {
     }
 
 
-    private String[] getAllIgnoreUri() {
+    private String[] listAllIgnoreUri() {
         List<String> list = new ArrayList<>();
-        securityProperties.getIgnoreUri().forEach((k, v) -> {
-            Arrays.stream(v).forEach(uri -> list.add(uri));
-        });
+        securityProperties.getIgnoreUri().forEach((k, v) -> Arrays.stream(v).forEach(list::add));
         return list.stream().distinct().toArray(String[]::new);
     }
 }

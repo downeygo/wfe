@@ -3,7 +3,7 @@ package xyz.imlent.wfe.core.annotation;
 /**
  * @author wfee
  */
-public enum AppEnv {
+public enum AppEnvEnum {
     /**
      * 开发
      */

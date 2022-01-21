@@ -1,15 +1,13 @@
 package xyz.imlent.wfe.core.config;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MapPropertySource;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import xyz.imlent.wfe.core.annotation.AppEnvEnum;
 import xyz.imlent.wfe.core.annotation.AppName;
-import xyz.imlent.wfe.core.constant.BaseConstant;
-import xyz.imlent.wfe.core.customer.PropertiesConfig;
+import xyz.imlent.wfe.core.exception.SystemException;
 
 import java.util.Arrays;
 
@@ -20,12 +18,11 @@ import java.util.Arrays;
  * @author wfee
  */
 public class EnvProcessor implements EnvironmentPostProcessor {
+
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        String name = getAppName(application);
-        String env = getEnv(environment);
-        MapPropertySource mapPropertySource = new MapPropertySource("wfe-global-config", PropertiesConfig.initAppConfig(env, name));
-        environment.getPropertySources().addFirst(mapPropertySource);
+        environment.getPropertySources()
+                .addFirst(EnvProperties.init(getEnvName(environment), getAppName(application)));
     }
 
     /**
@@ -38,10 +35,10 @@ public class EnvProcessor implements EnvironmentPostProcessor {
         Class<?> aClass = application.getMainApplicationClass();
         AppName appName = aClass.getAnnotation(AppName.class);
         if (ObjectUtils.isEmpty(appName)) {
-            throw new RuntimeException(String.format("请使用[%s]为[%s]命名", AppName.class, aClass));
+            throw new SystemException(String.format("请使用[%s]为[%s]命名", AppName.class, aClass));
         }
         if (!StringUtils.hasText(appName.name())) {
-            throw new RuntimeException(String.format("请为[%s]正确命名", aClass));
+            throw new SystemException(String.format("请为[%s]正确命名", aClass));
         }
         return appName.name();
     }
@@ -52,15 +49,16 @@ public class EnvProcessor implements EnvironmentPostProcessor {
      * @param environment 环境
      * @return 可用环境
      */
-    private String getEnv(ConfigurableEnvironment environment) {
+    private String getEnvName(ConfigurableEnvironment environment) {
         String[] profiles = environment.getActiveProfiles();
         // 获取可使用的环境变量
         int length = profiles.length;
         if (length == 0) {
-            return PropertiesConfig.ACTIVE_ENV;
+            return AppEnvEnum.DEV.name().toLowerCase();
         }
-        if (length > 1 || !ArrayUtils.contains(BaseConstant.ENVS, profiles[0])) {
-            throw new RuntimeException(String.format("请在%s环境中选择一个使用，当前环境%s", Arrays.toString(BaseConstant.ENVS), Arrays.toString(profiles)));
+        AppEnvEnum[] appEnvEnums = AppEnvEnum.values();
+        if (length > 1 || Arrays.stream(appEnvEnums).noneMatch(e -> e.name().toLowerCase().equals(profiles[0]))) {
+            throw new SystemException(String.format("请在%s环境中选择一个使用，当前环境%s", Arrays.toString(appEnvEnums), Arrays.toString(profiles)));
         }
         return profiles[0];
     }

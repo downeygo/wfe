@@ -1,4 +1,0 @@
-server:
-  port: ${wfe.services.${spring.application.name}.port}
-  servlet:
-    context-path: ${wfe.services.${spring.application.name}.context-path}

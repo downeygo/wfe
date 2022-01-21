@@ -8,3 +8,8 @@ spring:
     url: ${wfe.datasource.url}
     username: ${wfe.datasource.username}
     password: ${wfe.datasource.password}
+
+  cloud:
+    nacos:
+      config:
+        name:

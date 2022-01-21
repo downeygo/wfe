@@ -1,7 +1,6 @@
 package xyz.imlent.wfe.uaa.config;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +16,13 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 /**
  * @author wfee
+ * 基于方法授权
  */
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-// 基于方法授权
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecutityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 注入自定义验证
