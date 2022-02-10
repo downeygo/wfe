@@ -1,5 +1,6 @@
 package xyz.imlent.wfe.core.config;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.core.env.MapPropertySource;
 import xyz.imlent.wfe.core.customer.NacosProperties;
 
@@ -9,10 +10,8 @@ import java.util.Map;
 /**
  * @author wfee
  */
+@UtilityClass
 public class EnvProperties {
-
-    private EnvProperties() {
-    }
 
     /**
      * 配置名称

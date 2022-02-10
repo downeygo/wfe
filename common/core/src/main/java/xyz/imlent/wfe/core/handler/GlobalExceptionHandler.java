@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author wfee
  */
 @RestController
-public class GlobleExceptionHandler implements ErrorController {
+public class GlobalExceptionHandler implements ErrorController {
 
     private ServerProperties serverProperties;
 

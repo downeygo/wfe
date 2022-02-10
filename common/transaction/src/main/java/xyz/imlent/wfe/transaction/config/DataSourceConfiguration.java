@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import xyz.imlent.wfe.core.exception.SystemException;
 
 import javax.sql.DataSource;
 
@@ -32,7 +33,7 @@ public class DataSourceConfiguration {
         try {
             factory = bean.getObject();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new SystemException(e);
         }
         return factory;
     }

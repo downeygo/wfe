@@ -19,7 +19,7 @@ import java.time.Instant;
 @Component
 public class ApiLogAspect {
     @Around("@annotation(xyz.imlent.wfe.log.annotation.ApiLog)")
-    public Object acroud(ProceedingJoinPoint point) throws Throwable {
+    public Object around(ProceedingJoinPoint point) throws Throwable {
         long start = Instant.now().toEpochMilli();
         Object result = point.proceed();
         long end = Instant.now().toEpochMilli();

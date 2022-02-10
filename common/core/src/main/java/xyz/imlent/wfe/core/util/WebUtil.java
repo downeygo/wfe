@@ -1,5 +1,6 @@
 package xyz.imlent.wfe.core.util;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
@@ -14,10 +15,8 @@ import java.util.Map;
 /**
  * @author wfee
  */
+@UtilityClass
 public class WebUtil {
-    private WebUtil() {
-        throw new IllegalStateException("Utility class");
-    }
 
     private static final String UN_KNOWN = "unknown";
 
@@ -47,11 +46,8 @@ public class WebUtil {
     }
 
     public static Map<String, String> getHeaders(HttpServletRequest request) {
-        if (request == null) {
-            return null;
-        }
+        Map<String, String> headerMap = new HashMap<>(16);
         Enumeration<String> headerNames = request.getHeaderNames();
-        Map<String, String> headerMap = new HashMap<>();
         while (headerNames.hasMoreElements()) {
             String name = headerNames.nextElement();
             String value = request.getHeader(name);

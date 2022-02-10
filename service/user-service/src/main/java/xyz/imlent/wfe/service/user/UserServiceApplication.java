@@ -8,14 +8,15 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import xyz.imlent.wfe.core.annotation.AppName;
 import xyz.imlent.wfe.core.constant.AppConstant;
 import xyz.imlent.wfe.core.constant.BaseConstant;
+import xyz.imlent.wfe.core.constant.BaseProperties;
 
 /**
  * @author wfee
  */
 @EnableAsync
 @SpringCloudApplication
-@ComponentScan(BaseConstant.BASE_PACKAGE)
-@EnableFeignClients(BaseConstant.BASE_PACKAGE)
+@ComponentScan(BaseProperties.BASE_PACKAGE)
+@EnableFeignClients(BaseProperties.BASE_PACKAGE)
 @AppName(name = AppConstant.APP_USER_SERVICE_NAME)
 public class UserServiceApplication {
     public static void main(String[] args) {

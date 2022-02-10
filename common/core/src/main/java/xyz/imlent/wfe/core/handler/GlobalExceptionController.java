@@ -42,7 +42,7 @@ import java.util.Set;
 @ConditionalOnClass({Servlet.class, DispatcherServlet.class})
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @RestControllerAdvice
-public class GlobleExceptionController {
+public class GlobalExceptionController {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

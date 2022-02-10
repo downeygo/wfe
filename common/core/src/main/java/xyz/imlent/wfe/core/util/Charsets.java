@@ -16,6 +16,7 @@
 package xyz.imlent.wfe.core.util;
 
 
+import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;
 
 import java.nio.charset.Charset;
@@ -27,6 +28,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *
  * @author L.cm
  */
+@UtilityClass
 public class Charsets {
 
 	/**
