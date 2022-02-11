@@ -22,7 +22,7 @@ public class EnvProcessor implements EnvironmentPostProcessor {
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         environment.getPropertySources()
-                .addFirst(EnvProperties.init(getEnvName(environment), getAppName(application)));
+                .addFirst(EnvConfig.init(getEnvName(environment), getAppName(application)));
     }
 
     /**
