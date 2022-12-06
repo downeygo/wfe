@@ -1,6 +1,6 @@
 package xyz.imlent.wfe.auth.config;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -11,12 +11,14 @@ import xyz.imlent.wfe.auth.properties.ResourceSecurityProperties;
 /**
  * @author wfee
  */
-@AllArgsConstructor
 public class DefaultResourceServerConfig extends ResourceServerConfigurerAdapter {
+    @Autowired
     private TokenStore tokenStore;
 
+    @Autowired
     private Environment environment;
 
+    @Autowired
     private ResourceSecurityProperties resourceSecurityProperties;
 
     @Override
