@@ -11,7 +11,7 @@ public class NacosProperties {
     /**
      * nacos地址
      */
-    public static final String ADDR = "192.168.0.126:8848";
+    public static final String ADDR = "127.0.0.1:8848";
 
     /**
      * DEFAULT_GROUP
@@ -31,5 +31,5 @@ public class NacosProperties {
     /**
      * 共享ID配置
      */
-    public static final String[] CONFIG_SHARED_DATAIDS = new String[]{"wfe-common.yaml"};
+    public static final String[] CONFIG_SHARED_DATA_IDS = new String[]{"wfe-common.yaml"};
 }

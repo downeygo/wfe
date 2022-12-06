@@ -8,8 +8,8 @@ import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCo
 /**
  * @author wfee
  */
-@Configuration
-public class AuthorizationCodeServicesConfig {
+@Deprecated
+public class AuthorizationCodeConfig {
     /**
      * 存取方式：授权码采用内存存取
      *

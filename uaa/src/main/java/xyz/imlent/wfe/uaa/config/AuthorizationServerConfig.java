@@ -1,6 +1,6 @@
 package xyz.imlent.wfe.uaa.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,34 +16,29 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author wfee
  */
 @Configuration
+@AllArgsConstructor
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    @Autowired
     private TokenStore tokenStore;
 
-    @Autowired
     private AuthorizationCodeServices authorizationCodeServices;
 
-    @Autowired
     private ClientDetailsService clientDetailsService;
 
+    private UserDetailsService userDetailsService;
+
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) {
         security
                 // 公开：/oauth/token_key
                 .tokenKeyAccess("isAuthenticated()")
@@ -59,9 +54,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(jwtAccessTokenConverter));
+        tokenEnhancerChain.setTokenEnhancers(Collections.singletonList(jwtAccessTokenConverter));
         endpoints.tokenStore(tokenStore)
                 .userDetailsService(userDetailsService)
                 .tokenEnhancer(tokenEnhancerChain)

@@ -1,6 +1,6 @@
 package xyz.imlent.wfe.core.handler;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import feign.FeignException;
 import feign.Response;
 import feign.RetryableException;
@@ -44,7 +44,7 @@ public class FeignExceptionHandler {
             if (response.body() != null) {
                 try {
                     // 服务之间调用所有异常处理
-                    R r = JSONObject.parseObject(response.body().asInputStream(), R.class);
+                    R r = JSON.parseObject(response.body().asInputStream(), R.class);
                     msg = r.getMsg();
                 } catch (Exception e) {
                     log.error("系统异常", e);

@@ -21,8 +21,7 @@ public class EnvProcessor implements EnvironmentPostProcessor {
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        environment.getPropertySources()
-                .addFirst(EnvConfig.init(getEnvName(environment), getAppName(application)));
+        environment.getPropertySources().addFirst(EnvConfig.init(getEnvName(environment), getAppName(application)));
     }
 
     /**
@@ -57,7 +56,7 @@ public class EnvProcessor implements EnvironmentPostProcessor {
             return AppEnvEnum.DEV.name().toLowerCase();
         }
         AppEnvEnum[] appEnvEnums = AppEnvEnum.values();
-        if (length > 1 || Arrays.stream(appEnvEnums).noneMatch(e -> e.name().toLowerCase().equals(profiles[0]))) {
+        if (length > 1 || Arrays.stream(appEnvEnums).noneMatch(e -> e.name().equalsIgnoreCase(profiles[0]))) {
             throw new SystemException(String.format("请在%s环境中选择一个使用，当前环境%s", Arrays.toString(appEnvEnums), Arrays.toString(profiles)));
         }
         return profiles[0];

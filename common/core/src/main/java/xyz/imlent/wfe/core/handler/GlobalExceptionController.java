@@ -137,13 +137,13 @@ public class GlobalExceptionController {
         return R.fail(e.status(), msg);
     }
 
-    @ExceptionHandler(Throwable.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public R handleError(Throwable e) {
-        log.error("系统异常", e);
-        //发送服务异常事件
-//		ErrorLogPublisher.publishEvent(e, UrlUtil.getPath(WebUtil.getRequest().getRequestURI()));
-        return R.fail(ResultCode.INTERNAL_SERVER_ERROR, (StringUtils.isEmpty(e.getMessage()) ? ResultCode.INTERNAL_SERVER_ERROR.getMessage() : e.getMessage()));
-    }
+//     @ExceptionHandler(Throwable.class)
+//     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//     public R handleError(Throwable e) {
+//         log.error("系统异常", e);
+//         //发送服务异常事件
+// //		ErrorLogPublisher.publishEvent(e, UrlUtil.getPath(WebUtil.getRequest().getRequestURI()));
+//         return R.fail(ResultCode.INTERNAL_SERVER_ERROR, (StringUtils.isEmpty(e.getMessage()) ? ResultCode.INTERNAL_SERVER_ERROR.getMessage() : e.getMessage()));
+//     }
 
 }

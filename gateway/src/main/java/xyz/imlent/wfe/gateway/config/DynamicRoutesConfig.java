@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
-import xyz.imlent.wfe.core.customer.NacosConfig;
+import xyz.imlent.wfe.core.customer.NacosProperties;
 import xyz.imlent.wfe.gateway.properties.DynamicRoutesProperties;
 
 import java.util.List;
@@ -45,18 +45,18 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
     @Bean
     public void refreshGatewayRoute() {
         try {
-            ConfigService configService = NacosFactory.createConfigService(NacosConfig.NACOS_ADDR);
+            ConfigService configService = NacosFactory.createConfigService(NacosProperties.ADDR);
             String routeDataId = properties.getRouteDataId();
             if (StringUtils.isBlank(routeDataId)) {
-                throw new RuntimeException("未匹配到动态路由ID{gateway.route-data-id}");
+                throw new NacosException(500, "未匹配到动态路由ID{gateway.route-data-id}");
             }
-            String config = configService.getConfig(routeDataId, NacosConfig.DEFAULT_GROUP, 5000L);
+            String config = configService.getConfig(routeDataId, NacosProperties.DEFAULT_GROUP, 5000L);
             if (StringUtils.isBlank(config)) {
-                throw new RuntimeException("未获取到动态路由配置{" + routeDataId + "}");
+                throw new NacosException(500, "未获取到动态路由配置{" + routeDataId + "}");
             }
             log.info("add gateway dynamic routes:{}", config);
             // 添加监听
-            configService.addListener(routeDataId, NacosConfig.DEFAULT_GROUP, new Listener() {
+            configService.addListener(routeDataId, NacosProperties.DEFAULT_GROUP, new Listener() {
                 @Override
                 public Executor getExecutor() {
                     return null;

@@ -1,12 +1,12 @@
 package xyz.imlent.wfe.auth.constant;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @author wfee
  */
+@UtilityClass
 public class AuthConstant {
-    private AuthConstant() {
-        throw new IllegalStateException("Utility class");
-    }
 
     public static final String USERNAME_PASSWORD_ERROR = "用户名或密码错误";
 }

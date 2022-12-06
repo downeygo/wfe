@@ -1,6 +1,6 @@
 package xyz.imlent.wfe.auth.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -11,20 +11,18 @@ import xyz.imlent.wfe.auth.properties.ResourceSecurityProperties;
 /**
  * @author wfee
  */
+@AllArgsConstructor
 public class DefaultResourceServerConfig extends ResourceServerConfigurerAdapter {
-    @Autowired
-    private TokenStore tokenStorer;
+    private TokenStore tokenStore;
 
-    @Autowired
     private Environment environment;
 
-    @Autowired
     private ResourceSecurityProperties resourceSecurityProperties;
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         resources.resourceId(getResourceId())
-                .tokenStore(tokenStorer)
+                .tokenStore(tokenStore)
                 .stateless(true);
     }
 
@@ -47,7 +45,7 @@ public class DefaultResourceServerConfig extends ResourceServerConfigurerAdapter
      * @param http
      * @throws Exception
      */
-    public HttpSecurity getHttpSecurity(HttpSecurity http) throws Exception {
+    protected HttpSecurity getHttpSecurity(HttpSecurity http) {
         return http;
     }
 
@@ -56,7 +54,7 @@ public class DefaultResourceServerConfig extends ResourceServerConfigurerAdapter
      *
      * @return
      */
-    public String getResourceId() {
+    protected String getResourceId() {
         return environment.getProperty("spring.application.name");
     }
 
