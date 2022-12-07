@@ -87,7 +87,7 @@ public class ErrorExceptionHandler extends DefaultErrorWebExceptionHandler {
      * @param errorMessage 异常信息
      * @return
      */
-    public static Map<String, Object> response(int status, String errorMessage) {
+    private static Map<String, Object> response(int status, String errorMessage) {
         Map<String, Object> map = new HashMap<>(16);
         map.put("code", status);
         map.put("success", false);
