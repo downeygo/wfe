@@ -6,9 +6,9 @@ import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.route.RouteDefinition;
@@ -21,25 +21,35 @@ import org.springframework.core.env.Environment;
 import reactor.core.publisher.Mono;
 import xyz.imlent.wfe.gateway.properties.DynamicRoutesProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Executor;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author wfee
  */
 @Slf4j
 @Configuration
-@AllArgsConstructor
 @ConditionalOnBean(DynamicRoutesProperties.class)
 public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
+    @Autowired
     private ApplicationEventPublisher publisher;
 
+    @Autowired
     private RouteDefinitionWriter routeDefinitionWriter;
 
+    @Autowired
     private DynamicRoutesProperties properties;
 
+    @Autowired
     private Environment environment;
+
+    private List<String> cacheIds = new ArrayList<>(16);
+
+    private Lock lock = new ReentrantLock();
 
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
@@ -64,6 +74,7 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
             if (StringUtils.isBlank(config)) {
                 throw new NacosException(0, "未获取到动态路由配置{" + routeDataId + "}");
             }
+            updateRoute(config);
             log.info("add gateway dynamic routes:{}", config);
             // 添加监听
             configService.addListener(routeDataId, group, new Listener() {
@@ -74,8 +85,7 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
 
                 @Override
                 public void receiveConfigInfo(String config) {
-                    List<RouteDefinition> routeDefinitionList = parseConfig(config);
-                    updateRoutes(routeDefinitionList);
+                    updateRoute(config);
                     log.info("update gateway dynamic routes:{}", config);
                 }
             });
@@ -86,11 +96,19 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
     }
 
     /**
+     * @param config
+     */
+    private void updateRoute(String config) {
+        List<RouteDefinition> routeDefinitionList = parse(config);
+        updateRoutes(routeDefinitionList);
+    }
+
+    /**
      * 解析json
      *
      * @param config
      */
-    private List<RouteDefinition> parseConfig(String config) {
+    private List<RouteDefinition> parse(String config) {
         return JSON.parseArray(config, RouteDefinition.class);
     }
 
@@ -106,10 +124,10 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
     /**
      * 删除路由
      *
-     * @param routeDefinition
+     * @param id
      */
-    private void deleteRoute(RouteDefinition routeDefinition) {
-        this.routeDefinitionWriter.delete(Mono.just(routeDefinition.getId())).subscribe();
+    private void deleteRoute(String id) {
+        this.routeDefinitionWriter.delete(Mono.just(id)).subscribe();
     }
 
     /**
@@ -118,15 +136,21 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
      * @param routeDefinitionList
      */
     private void updateRoutes(List<RouteDefinition> routeDefinitionList) {
+        lock.lock();
         try {
+            // 删除缓存中的路由
+            cacheIds.forEach(this::deleteRoute);
             routeDefinitionList.forEach(rd -> {
-                this.deleteRoute(rd);
                 this.addRoute(rd);
+                // 将路由添加到缓存
+                cacheIds.add(rd.getId());
             });
             this.publish();
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getLocalizedMessage());
+        } finally {
+            lock.unlock();
         }
     }
 
