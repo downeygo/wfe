@@ -31,5 +31,5 @@ public class NacosProperties {
     /**
      * 共享ID配置
      */
-    public static final String[] CONFIG_SHARED_DATA_IDS = new String[]{"wfe-common.yaml"};
+    public static final String[] CONFIG_SHARED_DATAIDS = new String[]{"wfe-common.yaml"};
 }

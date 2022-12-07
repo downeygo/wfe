@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,16 +16,16 @@ public interface UserDetailsMapper {
     Map<String, Object> getUserByUsername(String username);
 
     @Select("select role_name from user_role where username = #{username}")
-    String[] listRolesByUsername(String username);
+    List<String> getRolesByUsername(String username);
 
     @Select({"<script>",
             "select distinct permission_name from role_permission where role_name in",
-            "<foreach collection='roles' item='role' open='(' separator=',' close=')'>",
+            "<foreach collection='roleList' item='role' open='(' separator=',' close=')'>",
             "#{role}",
             "</foreach>",
             "</script>"})
-    String[] listPermissionsByRoles(@Param("roles") String[] roles);
+    List<String> getPermissionsByRoles(@Param("roleList") List<String> roleList);
 
     @Select("select permission_name from role_permission")
-    String[] listAllPermissions();
+    List<String> getAllPermissions();
 }

@@ -14,7 +14,7 @@ public class NacosConfig {
     /**
      * nacos地址
      */
-    public static final String NACOS_ADDR = "127.0.0.1:8848";
+    public static final String NACOS_ADDR = "192.168.0.126:8848";
 
     /**
      * DEFAULT_GROUP

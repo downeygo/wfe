@@ -47,7 +47,7 @@ public class DefaultResourceServer extends ResourceServerConfigurerAdapter {
      * @param http
      * @throws Exception
      */
-    protected HttpSecurity getHttpSecurity(HttpSecurity http) {
+    public HttpSecurity getHttpSecurity(HttpSecurity http) {
         return http;
     }
 
@@ -56,7 +56,7 @@ public class DefaultResourceServer extends ResourceServerConfigurerAdapter {
      *
      * @return
      */
-    protected String getResourceId() {
+    public String getResourceId() {
         return environment.getProperty("spring.application.name");
     }
 

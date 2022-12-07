@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 @Configuration
 @ConditionalOnClass(HttpServletRequest.class)
-public class FormAuthHandler {
+public class FormLoginHandler {
 
     /**
      * 表单登录失败处理

@@ -47,7 +47,7 @@ public class EnvPropertites {
         configMap.put("spring.cloud.nacos.config.namespace", envName);
         // configMap.put("spring.cloud.nacos.config.prefix", NacosProperties.CONFIG_PREFIX + appName);
         configMap.put("spring.cloud.nacos.config.file-extension", NacosProperties.CONFIG_FILE_EXTENSION);
-        configMap.put("spring.cloud.nacos.config.shared-dataids", NacosProperties.CONFIG_SHARED_DATA_IDS);
+        configMap.put("spring.cloud.nacos.config.shared-dataids", NacosProperties.CONFIG_SHARED_DATAIDS);
         configMap.put("spring.cloud.nacos.config.refreshable-dataids", true);
         // seata分布式事务配置
         configMap.put("spring.cloud.alibaba.seata.tx-service-group", envName);

@@ -1,4 +1,4 @@
-package xyz.imlent.wfe.auth.config;
+package xyz.imlent.wfe.uaa.config.bean;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCo
 /**
  * @author wfee
  */
-@Deprecated
+@Configuration
 public class AuthorizationCodeConfig {
     /**
      * 存取方式：授权码采用内存存取
