@@ -1,5 +1,5 @@
 **基于spring cloud的微服务wfe**  
-**just for study**  
+  
 提供:  
 1.注册和配置中心nacos  
 2.基于oauth2的认证中心uaa  
