@@ -11,7 +11,7 @@ import xyz.imlent.wfe.auth.properties.ResourceSecurityProperties;
 /**
  * @author wfee
  */
-public class DefaultResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class DefaultResourceServer extends ResourceServerConfigurerAdapter {
     @Autowired
     private TokenStore tokenStore;
 

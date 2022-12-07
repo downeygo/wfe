@@ -1,29 +1,27 @@
-package xyz.imlent.wfe.uaa.bean;
+package xyz.imlent.wfe.uaa.config.bean;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
 /**
  * @author wfee
  */
-@Component
+@Configuration
 @AllArgsConstructor
-public class ClientDetailsBean {
+public class ClientDetailsConfig {
 
     private DataSource dataSource;
 
     private PasswordEncoder passwordEncoder;
 
-
     /**
      * 从数据库获取client_details
-     *
      * @return
      */
     @Bean

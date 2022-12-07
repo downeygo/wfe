@@ -1,6 +1,6 @@
 feign:
   hystrix:
-  # false: feign异常处理后返回的状态为200，导致seata不能正常处理事务
+    # false: feign异常处理后返回的状态为200，导致seata不能正常处理事务
     enabled: false
   okhttp:
     enabled: true
@@ -22,7 +22,7 @@ hystrix:
 wfe:
   security:
     ignore-uri:
-#      wfe-gateway:
+      # wfe-gateway:
       wfe-uaa: /oauth/**
       wfe-user-service: /**
       wfe-system-service: /**

@@ -24,8 +24,11 @@ import java.util.Collections;
 @Configuration
 @AllArgsConstructor
 @EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
+
     private AuthenticationManager authenticationManager;
+
+    private UserDetailsService userDetailsService;
 
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
@@ -34,8 +37,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private AuthorizationCodeServices authorizationCodeServices;
 
     private ClientDetailsService clientDetailsService;
-
-    private UserDetailsService userDetailsService;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {

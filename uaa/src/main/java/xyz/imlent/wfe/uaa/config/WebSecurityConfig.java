@@ -15,8 +15,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
- * @author wfee
  * 基于方法授权
+ *
+ * @author wfee
  */
 @Configuration
 @EnableWebSecurity
@@ -24,14 +25,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /**
-     * 注入自定义验证
-     */
     private UserDetailsService userDetailsService;
 
-    /**
-     * 密码加密
-     */
     private PasswordEncoder passwordEncoder;
 
     private AuthenticationFailureHandler authenticationFailureHandler;

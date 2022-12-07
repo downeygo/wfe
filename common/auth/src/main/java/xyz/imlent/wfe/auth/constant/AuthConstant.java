@@ -7,6 +7,5 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class AuthConstant {
-
     public static final String USERNAME_PASSWORD_ERROR = "用户名或密码错误";
 }

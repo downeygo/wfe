@@ -11,7 +11,7 @@ import java.util.Map;
  * @author wfee
  */
 @UtilityClass
-public class EnvConfig {
+public class EnvPropertites {
 
     /**
      * 配置名称
