@@ -46,6 +46,7 @@ public class EnvPropertites {
         configMap.put("spring.cloud.nacos.discovery.namespace", envName);
         configMap.put("spring.cloud.nacos.config.server-addr", NacosProperties.ADDR);
         configMap.put("spring.cloud.nacos.config.namespace", envName);
+        configMap.put("spring.cloud.nacos.config.group", NacosProperties.DEFAULT_GROUP);
         // configMap.put("spring.cloud.nacos.config.prefix", NacosProperties.CONFIG_PREFIX + appName);
         configMap.put("spring.cloud.nacos.config.file-extension", NacosProperties.CONFIG_FILE_EXTENSION);
         configMap.put("spring.cloud.nacos.config.shared-dataids", NacosProperties.CONFIG_SHARED_DATAIDS);

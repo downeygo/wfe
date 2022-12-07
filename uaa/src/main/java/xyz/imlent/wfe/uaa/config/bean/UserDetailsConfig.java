@@ -1,6 +1,7 @@
 package xyz.imlent.wfe.uaa.config.bean;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import xyz.imlent.wfe.uaa.mapper.UserDetailsMapper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,21 +24,21 @@ public class UserDetailsConfig implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Map<String, Object> user = userDetailsMapper.getUserByUsername(username);
         if (!ObjectUtils.isEmpty(user)) {
-            List<String> roles = userDetailsMapper.getRolesByUsername(username);
-            List<String> permissions = new ArrayList<>();
+            String[] roles = userDetailsMapper.listRolesByUsername(username);
+            String[] permissions = {};
             if (!ObjectUtils.isEmpty(roles)) {
-                if (roles.contains("admin")) {
-                    permissions = userDetailsMapper.getAllPermissions();
+                if (ArrayUtils.contains(roles, "admin")) {
+                    permissions = userDetailsMapper.listAllPermissions();
                 } else {
-                    permissions = userDetailsMapper.getPermissionsByRoles(roles);
+                    permissions = userDetailsMapper.listPermissionsByRoles(roles);
                 }
             }
             return User.withUsername((String) user.get("username"))
                     .password((String) user.get("password"))
                     .accountLocked("1".equals(user.get("account_locked")))
                     .accountLocked("1".equals(user.get("account_expired")))
-                    .roles(roles.toArray(new String[roles.size()]))
-                    .authorities(permissions.toArray(new String[permissions.size()]))
+                    .roles(roles)
+                    .authorities(permissions)
                     .build();
         }
         return null;

@@ -19,8 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import reactor.core.publisher.Mono;
-import xyz.imlent.wfe.core.customer.NacosConfig;
-import xyz.imlent.wfe.core.customer.NacosProperties;
 import xyz.imlent.wfe.gateway.properties.DynamicRoutesProperties;
 
 import java.util.List;
@@ -43,8 +41,6 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
 
     private Environment environment;
 
-
-
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
         this.publisher = publisher;
@@ -53,22 +49,24 @@ public class DynamicRoutesConfig implements ApplicationEventPublisherAware {
     @Bean
     public void refreshGatewayRoute() {
         try {
-            Properties nacosProperties = new Properties();
-            nacosProperties.setProperty(PropertyKeyConst.SERVER_ADDR, NacosProperties.ADDR);
+            String serverAddr = environment.getProperty("spring.cloud.nacos.config.server-addr");
             String namespace = environment.getProperty("spring.cloud.nacos.config.namespace");
+            String group = environment.getProperty("spring.cloud.nacos.config.group");
+            Properties nacosProperties = new Properties();
+            nacosProperties.setProperty(PropertyKeyConst.SERVER_ADDR, serverAddr);
             nacosProperties.setProperty(PropertyKeyConst.NAMESPACE, namespace);
             ConfigService configService = NacosFactory.createConfigService(nacosProperties);
             String routeDataId = properties.getRouteDataId();
             if (StringUtils.isBlank(routeDataId)) {
                 throw new NacosException(0, "未匹配到动态路由ID{gateway.route-data-id}");
             }
-            String config = configService.getConfig(routeDataId, NacosProperties.DEFAULT_GROUP, 5000L);
+            String config = configService.getConfig(routeDataId, group, 5000L);
             if (StringUtils.isBlank(config)) {
                 throw new NacosException(0, "未获取到动态路由配置{" + routeDataId + "}");
             }
             log.info("add gateway dynamic routes:{}", config);
             // 添加监听
-            configService.addListener(routeDataId, NacosProperties.DEFAULT_GROUP, new Listener() {
+            configService.addListener(routeDataId, group, new Listener() {
                 @Override
                 public Executor getExecutor() {
                     return null;

@@ -11,17 +11,15 @@ import xyz.imlent.wfe.core.constant.AppConstant;
  * @author wfee
  */
 @Component
-@ConditionalOnProperty(prefix = "wfe.gateway", name = "dynamic", havingValue = "false")
+@ConditionalOnProperty(prefix = "gateway", name = "dynamic", havingValue = "false")
 public class RoutesConfig {
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(r -> r
-                        .path("/uaa/**")
+                .route(r -> r.path("/uaa/**")
                         .filters(f -> f.stripPrefix(0))
                         .uri("lb://" + AppConstant.APP_UAA_NAME))
-                .route(r -> r
-                        .path("/user/**")
+                .route(r -> r.path("/user/**")
                         .filters(f -> f.stripPrefix(0))
                         .uri("lb://" + AppConstant.APP_USER_SERVICE_NAME))
                 .build();
